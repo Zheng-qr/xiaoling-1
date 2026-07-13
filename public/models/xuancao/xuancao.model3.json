@@ -1,0 +1,145 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "xuancao.moc3",
+    "Textures": [
+      "xuancao.4096/texture_00.png",
+      "xuancao.4096/texture_01.png",
+      "xuancao.4096/texture_02.png",
+      "xuancao.4096/texture_03.png"
+    ],
+    "Physics": "xuancao.physics3.json",
+    "DisplayInfo": "xuancao.cdi3.json",
+    "Motions": {
+      "Idle": [
+        {
+          "File": "idle.motion3.json",
+          "FadeInTime": 0.25,
+          "FadeOutTime": 0.25
+        }
+      ],
+      "Walk": [
+        {
+          "File": "walk.motion3.json",
+          "FadeInTime": 0.25,
+          "FadeOutTime": 0.25
+        }
+      ],
+      "Speaking": [
+        {
+          "File": "speaking.motion3.json",
+          "FadeInTime": 0.12,
+          "FadeOutTime": 0.18
+        }
+      ]
+    },
+    "Expressions": [
+      {
+        "Name": "发包上",
+        "File": "发包上.exp3.json"
+      },
+      {
+        "Name": "发包下",
+        "File": "发包下.exp3.json"
+      },
+      {
+        "Name": "发包顶",
+        "File": "发包顶.exp3.json"
+      },
+      {
+        "Name": "右腿袜子",
+        "File": "右腿袜子.exp3.json"
+      },
+      {
+        "Name": "哭哭",
+        "File": "哭哭.exp3.json"
+      },
+      {
+        "Name": "头花变样式",
+        "File": "头花变样式.exp3.json"
+      },
+      {
+        "Name": "头花变白",
+        "File": "头花变白.exp3.json"
+      },
+      {
+        "Name": "少女体",
+        "File": "少女体.exp3.json"
+      },
+      {
+        "Name": "尾巴",
+        "File": "尾巴.exp3.json"
+      },
+      {
+        "Name": "幼女体",
+        "File": "幼女体.exp3.json"
+      },
+      {
+        "Name": "手",
+        "File": "手.exp3.json"
+      },
+      {
+        "Name": "白眼",
+        "File": "白眼.exp3.json"
+      },
+      {
+        "Name": "短发",
+        "File": "短发.exp3.json"
+      },
+      {
+        "Name": "脸红1",
+        "File": "脸红1.exp3.json"
+      },
+      {
+        "Name": "脸红2",
+        "File": "脸红2.exp3.json"
+      },
+      {
+        "Name": "花眼",
+        "File": "花眼.exp3.json"
+      },
+      {
+        "Name": "行走",
+        "File": "行走.exp3.json"
+      },
+      {
+        "Name": "角",
+        "File": "角.exp3.json"
+      },
+      {
+        "Name": "豆豆眉",
+        "File": "豆豆眉.exp3.json"
+      },
+      {
+        "Name": "钱眼",
+        "File": "钱眼.exp3.json"
+      },
+      {
+        "Name": "长发",
+        "File": "长发.exp3.json"
+      },
+      {
+        "Name": "黑脸",
+        "File": "黑脸.exp3.json"
+      }
+    ]
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    }
+  ],
+  "HitAreas": []
+}

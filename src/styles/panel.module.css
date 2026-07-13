@@ -1,0 +1,45 @@
+.scrollPanel {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  width: 380px;
+  max-height: calc(100vh - 48px);
+  background: rgba(249, 245, 234, 0.96);
+  border-radius: 22px;
+  border: 1.5px solid #D7A67B;
+  box-shadow: 0 12px 28px rgba(131, 102, 68, 0.12);
+  overflow: hidden;
+  z-index: 30;
+  animation: slideIn 500ms ease forwards;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 251, 242, 0.8);
+  border: 1px solid #D9C7A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #8B8578;
+  z-index: 10;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 251, 242, 1);
+  border-color: #D7A67B;
+}
+
+.knowledgePanel {
+  padding: 24px;
+}
+
+.mapPanel {
+  padding: 24px;
+}

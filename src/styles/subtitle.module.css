@@ -1,0 +1,73 @@
+.subtitleDock {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52%;
+  max-width: 64%;
+  text-align: center;
+  z-index: 20;
+  transition: opacity 300ms ease;
+}
+
+.previous {
+  font-size: 16px;
+  color: rgba(60, 53, 44, 0.6);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.current {
+  font-size: 24px;
+  color: #3C352C;
+  font-weight: 600;
+  line-height: 1.6;
+  cursor: pointer;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+.expandCard {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  background: rgba(249, 245, 234, 0.96);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(131, 102, 68, 0.15);
+  border: 1.5px solid #D7A67B;
+  margin-bottom: 12px;
+  animation: slideUp 300ms ease;
+}
+
+.expandHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.expandTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3C352C;
+  font-family: "Noto Serif SC", serif;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #8B8578;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.expandContent {
+  font-size: 14px;
+  color: #6E685C;
+  line-height: 1.8;
+  max-height: 200px;
+  overflow-y: auto;
+}

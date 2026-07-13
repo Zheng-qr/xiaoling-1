@@ -1,0 +1,41 @@
+:root {
+  /* 页面背景 */
+  --page-bg-top: #EAF3E2;
+  --page-bg-mid: #E3EFDA;
+  --page-bg-bottom: #DDEBD4;
+
+  /* 面板 / 宣纸 */
+  --panel-bg: #F9F5EA;
+  --panel-bg-soft: rgba(249, 245, 234, 0.94);
+  --panel-bg-strong: rgba(249, 245, 234, 0.96);
+  --panel-inner-bg: #FFFBF2;
+
+  /* 主强调 */
+  --accent-main: #D96A32;
+  --accent-strong: #C95824;
+  --accent-deep: #A9471F;
+
+  /* 辅助色 */
+  --assist-green: #7A9B79;
+  --assist-green-deep: #6E9186;
+  --assist-green-light: #BFD2BB;
+
+  /* 文字 */
+  --text-main: #3C352C;
+  --text-sub: #6E685C;
+  --text-weak: #8B8578;
+
+  /* 边框 */
+  --border-main: #D7A67B;
+  --border-soft: #D9C7A8;
+  --border-green: #B8C8B1;
+
+  /* 地图状态 */
+  --current-point: #D84F2C;
+  --next-point: #6F9486;
+
+  /* 阴影 */
+  --shadow-soft: 0 8px 24px rgba(131, 102, 68, 0.10);
+  --shadow-panel: 0 12px 28px rgba(131, 102, 68, 0.12);
+  --shadow-card: 0 10px 20px rgba(217, 106, 50, 0.12);
+}

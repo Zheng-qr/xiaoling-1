@@ -1,0 +1,102 @@
+/* 画轴滑入动画 */
+@keyframes slideIn {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 画轴滑出动画 */
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 淡出动画 */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* 从下方滑入 */
+@keyframes slideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 地图节点脉冲动画 */
+@keyframes nodePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 106, 50, 0.32);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(217, 106, 50, 0);
+  }
+}
+
+/* 呼吸光晕动画 */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+/* 数字人转向动画 */
+@keyframes turnRight {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+/* 路线导览模式进入动效 */
+.route-enter-animation {
+  animation: fadeIn 600ms ease forwards;
+}
+
+.route-enter-animation-delay-1 {
+  animation: slideUp 520ms ease 120ms forwards;
+  opacity: 0;
+}
+
+.route-enter-animation-delay-2 {
+  animation: fadeIn 420ms ease 80ms forwards;
+  opacity: 0;
+}

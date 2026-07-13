@@ -1,0 +1,55 @@
+.controlDock {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 24px;
+  background: rgba(249, 245, 234, 0.9);
+  border-radius: 40px;
+  box-shadow: 0 4px 16px rgba(131, 102, 68, 0.1);
+  border: 1px solid rgba(215, 166, 123, 0.3);
+  z-index: 20;
+  transition: opacity 300ms ease;
+}
+
+.button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 251, 242, 0.8);
+  border: 1px solid #D9C7A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6E685C;
+  transition: all 200ms ease;
+}
+
+.button:hover {
+  background: rgba(255, 251, 242, 1);
+  border-color: #D7A67B;
+}
+
+.micButton {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #D96A32, #C95824);
+  border: 2px solid #A9471F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #FFF9F2;
+  box-shadow: 0 4px 12px rgba(217, 106, 50, 0.3);
+  transition: all 200ms ease;
+}
+
+.micButtonActive {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(217, 106, 50, 0.5);
+}

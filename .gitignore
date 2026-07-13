@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Build output
+dist/
+
+# Local env and logs
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local Codex/worktree metadata
+.agents/
+.agents_*/
+.codex/
+.git_*/
+
+# Large raw source packs and local backups kept outside the app runtime
+/backups/
+/miara_en/
+/map/
+/photo/
+/虚拟皮套39/
+/古装萝莉提灯/
+/新建文件夹/
+/新建文件夹_*/
+
+# One-off planning/reference artifacts
+/word_content.txt
+/参考图片.png
+/Route Guide Frontend Specification.docx

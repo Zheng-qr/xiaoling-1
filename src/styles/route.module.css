@@ -1,0 +1,178 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  display: flex;
+  gap: 24px;
+  background: linear-gradient(180deg, #EAF3E2 0%, #E3EFDA 50%, #DDEBD4 100%);
+}
+
+.leftColumn {
+  position: relative;
+  width: 560px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.backBtn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(249, 245, 234, 0.9);
+  border: 1px solid #D9C7A8;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #6E685C;
+  font-size: 14px;
+  z-index: 10;
+  transition: all 200ms ease;
+}
+
+.backBtn:hover {
+  background: rgba(249, 245, 234, 1);
+  border-color: #D7A67B;
+}
+
+.routeTextCard {
+  width: 560px;
+  height: 240px;
+  padding: 26px 30px;
+  border-radius: 22px;
+  background: rgba(249, 245, 234, 0.96);
+  border: 1.5px solid #D7A67B;
+  box-shadow: 0 8px 24px rgba(131, 102, 68, 0.10);
+  position: relative;
+  overflow: hidden;
+}
+
+.avatarArea {
+  position: relative;
+  width: 560px;
+  height: 592px;
+  overflow: visible;
+}
+
+.routeMapPanel {
+  width: 100%;
+  height: 520px;
+  border-radius: 22px;
+  background: rgba(249, 245, 234, 0.94);
+  border: 1.5px solid #D7A67B;
+  box-shadow: 0 12px 28px rgba(131, 102, 68, 0.12);
+  padding: 22px 28px 20px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.routeSpotsPanel {
+  width: 100%;
+  height: 312px;
+  border-radius: 22px;
+  background: rgba(249, 245, 234, 0.94);
+  border: 1.5px solid #D7A67B;
+  box-shadow: 0 12px 28px rgba(131, 102, 68, 0.12);
+  padding: 18px 20px 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.spotCard {
+  position: relative;
+  height: 226px;
+  padding: 10px;
+  border-radius: 16px;
+  background: #FFFBF2;
+  border: 1px solid #DDD0B7;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(131, 102, 68, 0.08);
+  transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+  cursor: pointer;
+}
+
+.spotCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(131, 102, 68, 0.12);
+}
+
+.spotCardActive {
+  background: #FFF8EE;
+  border: 2px solid #D96A32;
+  box-shadow: 0 10px 20px rgba(217, 106, 50, 0.12);
+}
+
+.spotImageWrap {
+  width: 100%;
+  height: 104px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #E8DDCF;
+}
+
+.spotImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 240ms ease;
+}
+
+.spotCardActive .spotImage {
+  transform: scale(1.035);
+}
+
+.spotName {
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #3C352C;
+  text-align: center;
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+  margin-top: 12px;
+}
+
+.spotCardActive .spotName {
+  color: #C95824;
+}
+
+.spotDesc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #6E685C;
+  text-align: center;
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.currentSpeakingTag {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 0 0 8px 0;
+  background: #D96A32;
+  color: #FFF9F2;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}

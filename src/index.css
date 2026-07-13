@@ -1,0 +1,115 @@
+:root {
+  /* 页面背景 */
+  --page-bg-top: #EAF3E2;
+  --page-bg-mid: #E3EFDA;
+  --page-bg-bottom: #DDEBD4;
+
+  /* 面板 / 宣纸 */
+  --panel-bg: #F9F5EA;
+  --panel-bg-soft: rgba(249, 245, 234, 0.94);
+  --panel-bg-strong: rgba(249, 245, 234, 0.96);
+  --panel-inner-bg: #FFFBF2;
+
+  /* 主强调 */
+  --accent-main: #D96A32;
+  --accent-strong: #C95824;
+  --accent-deep: #A9471F;
+
+  /* 辅助色 */
+  --assist-green: #7A9B79;
+  --assist-green-deep: #6E9186;
+  --assist-green-light: #BFD2BB;
+
+  /* 文字 */
+  --text-main: #3C352C;
+  --text-sub: #6E685C;
+  --text-weak: #8B8578;
+
+  /* 边框 */
+  --border-main: #D7A67B;
+  --border-soft: #D9C7A8;
+  --border-green: #B8C8B1;
+
+  /* 地图状态 */
+  --current-point: #D84F2C;
+  --next-point: #6F9486;
+
+  /* 阴影 */
+  --shadow-soft: 0 8px 24px rgba(131, 102, 68, 0.10);
+  --shadow-panel: 0 12px 28px rgba(131, 102, 68, 0.12);
+  --shadow-card: 0 10px 20px rgba(217, 106, 50, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "HarmonyOS Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* 主对话模式背景 */
+.main-mode-bg {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(217, 106, 50, 0.06), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(122, 155, 121, 0.08), transparent 28%),
+    linear-gradient(180deg, var(--page-bg-top) 0%, var(--page-bg-mid) 50%, var(--page-bg-bottom) 100%);
+}
+
+/* 路线导览模式背景 */
+.route-mode-bg {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(217, 106, 50, 0.06), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(122, 155, 121, 0.08), transparent 28%),
+    linear-gradient(180deg, var(--page-bg-top) 0%, var(--page-bg-mid) 50%, var(--page-bg-bottom) 100%);
+}
+
+/* 标题字体 */
+.serif-font {
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+}
+
+/* 按钮基础样式 */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 133, 120, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 133, 120, 0.5);
+}
