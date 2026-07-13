@@ -1,6 +1,6 @@
 # frontend_new 文件清理记录
 
-本文档记录 `frontend_new` 当前的文件清理状态、已删除内容、保留内容，以及仍需用户确认是否上传的资料类文件。
+本文档记录 `frontend_new` 当前的文件清理状态、已删除内容、保留内容，以及最终上传到 GitHub 的目录组织方式。
 
 ## 1. 清理目标
 
@@ -96,24 +96,28 @@
 - `backend/node_modules/` 可在 `backend/` 内通过 `npm.cmd install` 重建。
 - `dist/` 可通过 `npm.cmd run build` 重建。
 
-## 5. 仍需确认的资料类文件
+## 5. 已随前端归档上传的资料文件
 
-以下文件不是运行必需，当前已在 `.gitignore` 中排除，默认不会上传。是否保留到 GitHub 需要你确认：
+以下文件不是运行必需，但已根据确认一并放入 `frontend_new/` 并上传，方便保留完整设计和过程资料：
 
 - `Route Guide Frontend Specification.docx`
 - `word_content.txt`
 - `参考图片.png`
 
-建议：
+说明：
 
-- 如果 GitHub 仓库只作为“新版前端源码仓库”，这三个文件可以继续不上传。
-- 如果希望仓库同时保存完整设计资料，可以把 `Route Guide Frontend Specification.docx` 放入 `docs/` 并移出 `.gitignore`。
-- `word_content.txt` 更像中间抽取文本，通常不建议上传。
-- `参考图片.png` 如果只是临时参考图，也不建议上传。
+- 这三个文件位于仓库的 `frontend_new/` 目录中，不散落在仓库根目录。
+- 后续如果项目仓库需要进一步规范文档结构，可以再把 `Route Guide Frontend Specification.docx` 移入 `frontend_new/docs/`。
 
-## 6. 当前上传建议
+## 6. 当前 GitHub 目录结构
 
-建议上传内容：
+仓库根目录只保留完整项目级别的文件和目录。当前前端统一放在：
+
+```text
+frontend_new/
+```
+
+`frontend_new/` 内部包含：
 
 ```text
 src/
@@ -128,16 +132,16 @@ vite.config.js
 Live2D_数字人形象实现详解.md
 开发计划文档.md
 景区导览数字人C端前端开发方案v1.0.md
-.gitignore
+Route Guide Frontend Specification.docx
+word_content.txt
+参考图片.png
 ```
 
-建议不上传内容：
+根目录 `.gitignore` 继续排除以下可重建或本地临时内容：
 
 ```text
 node_modules/
 backend/node_modules/
 dist/
-Route Guide Frontend Specification.docx
-word_content.txt
-参考图片.png
+.vite/
 ```

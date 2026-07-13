@@ -1,0 +1,820 @@
+﻿路线导览模式前端标注级页面规范
+浅色配色最终版
+1. 页面定位
+本页面用于数字人 C 端在识别到“路线导览 / 推荐路线 / 下一站 / 怎么走 / 路线规划”等意图后进入的专属路线导览模式。
+数字人陪同讲解的景区路线导览画卷。
+页面核心结构为：
+左侧：数字人讲解区
+右侧：路线导览信息区
+右侧路线导览信息区再分为：
+上方：推荐游览路线地图
+下方：本路线主要景点
+2. 设计基准
+2.1 基准画布
+设计基准尺寸：
+1440 × 900
+适配优先级：
+PC 网页端
+景区横屏大屏等比例放大
+页面不出现浏览器边框、地址栏或系统控件。
+2.2 页面安全边距
+页面外边距：
+左：24px
+右：24px
+上：24px
+下：24px
+主区域间距：
+左右两栏间距：24px
+右侧上下模块间距：20px
+3. 页面整体布局
+3.1 布局总览
+以 1440 × 900 为基准。
+页面有效内容区：
+X：24px
+Y：24px
+W：1392px
+H：852px
+推荐分栏：
+左侧数字人讲解区：
+X：24px
+Y：24px
+W：560px
+H：852px
+右侧路线导览区：
+X：608px
+Y：24px
+W：808px
+H：852px
+中间间距：
+24px
+3.2 区块尺寸表
+ 全局背景
+采用纯 CSS 渐变背景，整体色调需要与浅绿色水彩路线图统一。
+背景：
+.page-route-guide {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(217, 106, 50, 0.06), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(122, 155, 121, 0.08), transparent 28%),
+    linear-gradient(180deg, #EAF3E2 0%, #E3EFDA 50%, #DDEBD4 100%);
+}
+页面氛围
+可以加入极轻的 CSS 光晕或柔和粒子，但必须克制。
+建议：
+光晕透明度：4% 到 8%
+粒子透明度：8% 到 12%
+粒子数量少
+不要使用深色雾气
+不要影响地图阅读
+5. 全局颜色规范
+5.1 页面级色板
+5.2 CSS 变量建议
+:root {
+  /* 页面背景 */
+  --page-bg-top: #EAF3E2;
+  --page-bg-mid: #E3EFDA;
+  --page-bg-bottom: #DDEBD4;
+
+  /* 面板 / 宣纸 */
+  --panel-bg: #F9F5EA;
+  --panel-bg-soft: rgba(249, 245, 234, 0.94);
+  --panel-bg-strong: rgba(249, 245, 234, 0.96);
+  --panel-inner-bg: #FFFBF2;
+
+  /* 主强调 */
+  --accent-main: #D96A32;
+  --accent-strong: #C95824;
+  --accent-deep: #A9471F;
+
+  /* 辅助色 */
+  --assist-green: #7A9B79;
+  --assist-green-deep: #6E9186;
+  --assist-green-light: #BFD2BB;
+
+  /* 文字 */
+  --text-main: #3C352C;
+  --text-sub: #6E685C;
+  --text-weak: #8B8578;
+
+  /* 边框 */
+  --border-main: #D7A67B;
+  --border-soft: #D9C7A8;
+  --border-green: #B8C8B1;
+
+  /* 地图状态 */
+  --current-point: #D84F2C;
+  --next-point: #6F9486;
+
+  /* 阴影 */
+  --shadow-soft: 0 8px 24px rgba(131, 102, 68, 0.10);
+  --shadow-panel: 0 12px 28px rgba(131, 102, 68, 0.12);
+  --shadow-card: 0 10px 20px rgba(217, 106, 50, 0.12);
+}
+6. 字体规范
+6.1 字体建议
+标题字体：
+font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+正文和 UI 字体：
+font-family: "HarmonyOS Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+使用原则：
+大标题可以偏宋体或新中式 serif
+正文、描述、按钮、标签优先使用无衬线字体
+不使用过度书法字体，避免影响可读性
+6.2 字号层级
+7. 左侧区域规范
+7.1 左侧栏容器
+位置：
+X：24px
+Y：24px
+W：560px
+H：852px
+结构：
+LeftColumn
+├── RouteTextCard
+└── AvatarArea
+样式：
+.left-column {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  width: 560px;
+  height: 852px;
+}
+7.2 左上讲解卡片 RouteTextCard
+位置：
+X：24px
+Y：24px
+W：560px
+H：240px
+样式：
+.route-text-card {
+  width: 560px;
+  height: 240px;
+  padding: 26px 30px;
+  border-radius: 22px;
+  background: var(--panel-bg-strong);
+  border: 1.5px solid var(--border-main);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+设计说明：
+卡片应该像轻型宣纸解说卡
+不使用厚重暗色面板
+不使用强红色粗边框
+可以有极轻水印装饰，但不能使用背景图片
+7.3 讲解卡片装饰
+可使用 CSS 线条或 SVG 装饰。
+建议：
+四角细线角花
+右下角浅色亭台线稿
+底部淡山形轮廓
+颜色：
+rgba(169, 122, 84, 0.14)
+透明度：
+8% 到 14%
+7.4 讲解卡片内部布局
+内部结构：
+RouteTextCard
+├── HeaderRow
+│   ├── Title: 路线导览
+│   └── Subtitle: 当前推荐路线
+├── MainGuideText
+├── Divider
+└── SupportText
+HeaderRow：
+.route-card-header {
+  height: 38px;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+标题：
+.route-card-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--accent-strong);
+  letter-spacing: 0.08em;
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+}
+副标题：
+.route-card-subtitle {
+  font-size: 16px;
+  color: var(--assist-green-deep);
+  font-weight: 500;
+}
+主讲解句：
+.route-main-text {
+  font-size: 32px;
+  line-height: 1.45;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.02em;
+}
+强调文字，例如“九龙灌浴”：
+.route-main-text .emphasis {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+分割线：
+.route-divider {
+  width: 100%;
+  height: 1px;
+  margin: 16px 0 14px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(217, 106, 50, 0.36) 18%,
+    rgba(217, 106, 50, 0.36) 82%,
+    transparent 100%
+  );
+}
+辅助说明：
+.route-support-text {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--text-sub);
+}
+时间 / 距离强调：
+.route-support-text .highlight {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+7.5 左下数字人区域 AvatarArea
+位置：
+X：24px
+Y：284px
+W：560px
+H：592px
+功能：
+承载 Live2D / 视频数字人
+在路线导览模式中，数字人保持七分身
+身体略朝右
+手势可指向右侧路线图
+样式：
+.avatar-area {
+  position: relative;
+  width: 560px;
+  height: 592px;
+  overflow: visible;
+}
+注意：
+数字人区域不再使用深色背景块
+不设置图片背景
+人物直接站在浅玉绿页面背景上
+使用轻柔光晕衬托人物即可
+7.6 数字人尺寸与位置
+数字人可视高度：
+560px ~ 610px
+人物中心：
+X：260px ~ 290px
+Y：底部对齐至 AvatarArea 底部
+如果是 Live2D 容器：
+.route-avatar-stage {
+  position: absolute;
+  left: 48%;
+  bottom: 0;
+  width: 420px;
+  height: 620px;
+  transform: translateX(-50%);
+}
+人物姿态：
+七分身
+面向游客，略偏右
+手势指向右侧路线图
+表情温和
+不遮挡左上讲解卡片
+不越界压到右侧路线图
+7.7 数字人脚底光晕
+.avatar-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  width: 340px;
+  height: 90px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle, rgba(217, 106, 50, 0.14), transparent 52%),
+    radial-gradient(circle, rgba(122, 155, 121, 0.08), transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+8. 右侧路线导览区规范
+8.1 右侧栏容器
+位置：
+X：608px
+Y：24px
+W：808px
+H：852px
+结构：
+RightColumn
+├── RouteMapPanel
+└── RouteSpotsPanel
+样式：
+.right-column {
+  position: absolute;
+  left: 608px;
+  top: 24px;
+  width: 808px;
+  height: 852px;
+}
+9. 右上路线图画轴 RouteMapPanel
+9.1 外部尺寸
+位置：
+X：608px
+Y：24px
+W：808px
+H：520px
+样式：
+.route-map-panel {
+  width: 808px;
+  height: 520px;
+  border-radius: 22px;
+  background: var(--panel-bg-soft);
+  border: 1.5px solid var(--border-main);
+  box-shadow: var(--shadow-panel);
+  padding: 22px 28px 20px;
+  position: relative;
+  overflow: hidden;
+}
+设计说明：
+右上路线图是全页第一信息重点
+面板边框要轻
+地图本身已足够丰富，外框不要过度装饰
+保持导览手册感，不做深色画轴
+9.2 路线图画轴内部结构
+RouteMapPanel
+├── MapHeader
+├── InfoChipsRow
+├── MapViewport
+└── RouteSummaryStrip
+内部尺寸建议：
+9.3 MapHeader
+尺寸：
+H：42px
+内容：
+装饰图标
+标题：推荐游览路线
+样式：
+.map-header {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+标题：
+.map-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.08em;
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+}
+图标：
+尺寸：28px × 28px
+颜色：var(–accent-main)
+可用路线、卷云、小旗、印章类图标
+9.5 MapViewport 地图主区域
+尺寸：
+W：752px
+H：330px
+margin-top：12px
+样式：
+.map-viewport {
+  position: relative;
+  width: 100%;
+  height: 330px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #F4F0E6;
+  border: 1px solid rgba(217, 199, 168, 0.82);
+}
+地图图片：
+.map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.98) contrast(0.98);
+}
+如果地图图片需要完整显示：
+.map-image.contain {
+  object-fit: contain;
+  background: #F4F0E6;
+}
+10. 右下主要景点画轴 RouteSpotsPanel
+10.1 外部尺寸
+位置：
+X：608px
+Y：564px
+W：808px
+H：312px
+样式：
+.route-spots-panel {
+  width: 808px;
+  height: 312px;
+  border-radius: 22px;
+  background: var(--panel-bg-soft);
+  border: 1.5px solid var(--border-main);
+  box-shadow: var(--shadow-panel);
+  padding: 18px 20px 18px;
+  position: relative;
+  overflow: hidden;
+}
+10.2 内部结构
+RouteSpotsPanel
+├── SpotsHeader
+└── SpotsCardRow
+    ├── SpotCard
+    ├── SpotCard
+    └── SpotCard
+10.3 SpotsHeader
+尺寸：
+H：38px
+内容：
+小图标
+标题：本路线主要景点
+样式：
+.spots-header {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+标题：
+.spots-title {
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.06em;
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+}
+图标：
+24px × 24px
+颜色：var(–accent-main)
+可用小亭、印章、景点标识
+10.4 SpotsCardRow
+尺寸：
+W：768px
+H：226px
+布局：
+.spots-card-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  height: 226px;
+}
+单卡宽度：
+约 245px
+11. 景点卡 SpotCard
+11.1 卡片尺寸
+单张卡片：
+W：245px
+H：226px
+普通状态：
+.spot-card {
+  position: relative;
+  height: 226px;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--panel-inner-bg);
+  border: 1px solid #DDD0B7;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(131, 102, 68, 0.08);
+  transition:
+    transform 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease;
+}
+高亮状态：
+.spot-card.active {
+  background: #FFF8EE;
+  border: 2px solid var(--accent-main);
+  box-shadow: var(--shadow-card);
+}
+11.2 图片区
+尺寸：
+W：225px
+H：104px
+样式：
+.spot-image-wrap {
+  width: 100%;
+  height: 104px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #E8DDCF;
+}
+图片：
+.spot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 240ms ease;
+}
+高亮状态下图片：
+.spot-card.active .spot-image {
+  transform: scale(1.035);
+}
+11.3 当前讲解标签
+仅当前正在讲解的景点显示。
+位置：
+left：10px
+top：10px
+样式：
+.current-speaking-tag {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 0 0 8px 0;
+  background: var(--accent-main);
+  color: #FFF9F2;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+文字：
+当前讲解
+11.4 景点名称
+位置：
+图片下方
+margin-top：12px
+样式：
+.spot-name {
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: center;
+  font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+}
+高亮卡片名称：
+.spot-card.active .spot-name {
+  color: var(--accent-strong);
+}
+11.5 景点描述
+位置：
+名称下方
+margin-top：8px
+样式：
+.spot-desc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-sub);
+  text-align: center;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+描述建议：
+九龙灌浴：
+九龙吐水，灌浴太子，是灵山胜境最具仪式感的迎宾景观。
+灵山大佛：
+庄严宏伟，是景区最具代表性的核心地标。
+梵宫：
+融合佛教艺术与建筑美学，空间恢弘而华丽。
+12. 路线导览模式动效
+12.1 模式进入动效
+触发条件：
+意图识别为 route_guidance
+或后端发送路线导览 payload
+或当前回答包含路线导览结构化数据
+动效顺序：
+右侧路线导览区淡入
+右上路线图画轴从右侧轻微滑入
+右下主要景点画轴延迟淡入
+左上讲解卡片淡入
+数字人轻微转向右侧 / 手势指向路线图
+参数：
+12.2 地图节点联动
+当讲解到某个景点时：
+地图对应节点脉冲 1 次
+路线图上的标签高亮
+右下对应景点卡变为 active
+左上讲解卡片更新主句
+节点脉冲：
+@keyframes nodePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 106, 50, 0.32);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(217, 106, 50, 0);
+  }
+}
+12.3 主要景点卡高亮切换
+切换方式：
+上一个 active 去高亮
+当前 active 加高亮
+图片轻微放大
+卡片边框加深
+“当前讲解”标签移动到当前卡片
+动效时长：
+240ms 到 320ms
+13. 交互规则
+13.1 当前版本交互
+当前版本不放复杂操作按钮。
+用户可以：
+查看路线图
+查看主要景点卡
+听数字人讲解
+打开历史记录
+结束导览
+用户暂不需要：
+拖动地图
+缩放地图
+切换路线
+点击景点进入详情
+手动开始导航
+13.2 Hover 效果
+PC 端可以加入轻量 hover，但不能让页面变得像普通后台卡片。
+景点卡 hover：
+.spot-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(131, 102, 68, 0.12);
+}
+信息标签 hover：
+暂不需要
+地图 hover：
+暂不需要
+14. 数据结构建议
+14.1 RouteGuidePayload
+interface RouteGuidePayload {
+  responseId: string;
+  routeId: string;
+
+  routeTitle: string;
+  currentLocation: string;
+  nextLocation: string;
+  estimatedDuration: string;
+  routeSummary: string;
+
+  mapImageUrl: string;
+
+  currentSpotId: string;
+  nextSpotId: string;
+
+  spots: RouteSpot[];
+}
+14.2 RouteSpot
+interface RouteSpot {
+  spotId: string;
+  spotName: string;
+  spotImageUrl: string;
+  spotDescription: string;
+
+  nodeX?: number;
+  nodeY?: number;
+
+  isCurrent?: boolean;
+  isNext?: boolean;
+  isActive?: boolean;
+}
+14.3 示例数据
+{
+  "responseId": "resp_001",
+  "routeId": "lingshan_main_route",
+  "routeTitle": "推荐游览路线",
+  "currentLocation": "灵山胜境入口",
+  "nextLocation": "九龙灌浴",
+  "estimatedDuration": "约 25 分钟",
+  "routeSummary": "入口广场 → 九龙灌浴 → 灵山大佛 → 梵宫",
+  "mapImageUrl": "/assets/routes/lingshan-route-map.png",
+  "currentSpotId": "entrance",
+  "nextSpotId": "jiulong",
+  "spots": [
+    {
+      "spotId": "jiulong",
+      "spotName": "九龙灌浴",
+      "spotImageUrl": "/assets/spots/jiulong.jpg",
+      "spotDescription": "九龙吐水，灌浴太子，是灵山胜境最具仪式感的迎宾景观。",
+      "isActive": true
+    },
+    {
+      "spotId": "buddha",
+      "spotName": "灵山大佛",
+      "spotImageUrl": "/assets/spots/buddha.jpg",
+      "spotDescription": "庄严宏伟，是景区最具代表性的核心地标。"
+    },
+    {
+      "spotId": "fangong",
+      "spotName": "梵宫",
+      "spotImageUrl": "/assets/spots/fangong.jpg",
+      "spotDescription": "融合佛教艺术与建筑美学，空间恢弘而华丽。"
+    }
+  ]
+}
+15. 前端组件拆分
+15.1 推荐组件结构
+RouteGuideLayout
+├── RouteTextCard
+├── RouteAvatarStage
+├── RouteMapPanel
+│   ├── MapHeader
+│   ├── RouteInfoChips
+│   ├── MapViewport
+│   └── RouteSummaryStrip
+└── RouteSpotsPanel
+    ├── SpotsHeader
+    └── SpotCardList
+        └── SpotCard
+15.2 组件职责
+RouteGuideLayout：
+控制整体左右布局
+接收路线 payload
+管理当前 activeSpotId
+绑定数字人讲解和地图 / 景点卡联动
+RouteTextCard：
+展示路线导览标题
+展示当前讲解主句
+展示当前路线辅助说明
+RouteAvatarStage：
+承载数字人
+路线模式下使用展示 / 指引动作
+RouteMapPanel：
+展示推荐路线地图
+展示路线摘要
+RouteSpotsPanel：
+展示本路线主要景点
+控制当前讲解景点高亮
+SpotCard：
+展示景点图片、名称、描述
+支持 active 高亮态
+16. 响应式适配
+16.1 1366 × 768
+适配策略：
+页面外边距缩小为 20px
+左侧栏宽度缩小为 520px
+右侧栏宽度自适应剩余空间
+左上讲解卡高度缩小为 210px
+右下景点卡描述最多 2 行
+数字人可视高度缩小 6% 到 10%
+路线图区域高度优先保证，不要过度压缩地图
+16.2 1920 × 1080
+适配策略：
+页面外边距放大为 36px
+左右间距放大为 32px
+面板高度按比例放大
+字号整体增加 8% 到 14%
+景点卡图片区域增加高度
+数字人保持七分身，不改成全身像
+背景渐变仍保持浅玉绿，不加深
+17. 验收标准
+17.1 静态视觉验收
+必须满足：
+页面整体为浅玉绿渐变背景
+页面背景不使用图片
+左侧为数字人 + 路线讲解文字
+右上为路线地图主模块
+右下为 3 个主要景点卡
+所有面板风格统一为宣纸米白
+朱砂橙只用于重点，不大面积铺满
+数字人不遮挡路线图
+路线图是第一信息重点
+景点卡清楚可读
+整体比深色版更清新、更像景区导览手册
+17.2 联动验收
+必须满足：
+进入路线导览模式时，右侧路线画轴出现
+左上讲解卡同步显示当前路线说明
+数字人保持七分身并指向右侧
+当前讲解景点卡高亮
+地图当前点 / 下一站标识清楚
+切换到下一站时，地图节点和景点卡同步切换
+不出现深色遮罩压暗地图
+17.3 内容验收
+必须满足：
+地图图片正常加载
+地图不被压暗、不被模糊
+景点图片正常加载
+景点名称不溢出
+景点描述最多 2 行，超出省略
+路线摘要优先保持一行
+重要名称可用朱砂橙高亮
+下一站可使用青灰绿辅助强调
+18. 当前版本固定规则
+当前路线导览模式固定为：
+PC 横屏优先
+浅色界面优先
+页面背景不使用图片
+背景使用浅玉绿渐变
+左侧数字人讲解，右侧路线信息
+右上路线图为第一重点
+右下主要景点为第二重点
+左上文字为当前导览说明
+数字人保持七分身
+右下景点卡一行 3 张
+当前讲解景点卡高亮
+地图不支持拖动和缩放
+景点卡暂不进入详情页
+不出现复杂导航按钮
+整体风格为浅玉绿背景 + 宣纸米白面板 + 朱砂橙强调 + 青灰绿辅助
+19. 最终页面描述
+最终页面应呈现为一个清新、明亮、易读的景区路线导览界面。
+页面背景是柔和的浅玉绿渐变，不使用任何图片背景。左上角是一张宣纸质感的路线讲解卡片，清楚告诉游客“当前在哪里、下一站去哪里、预计多久到达”。左下方是七分身数字人，穿着新中式导览服饰，以温和手势指向右侧路线图。
+右侧上方是主路线地图模块，展示本地水彩景区路线图、当前位置、下一站、预计用时和路线经过顺序。地图保持明亮清晰，不叠加深色遮罩。右侧下方是本路线主要景点摘要区，横向展示三个景点卡片，每张卡包含图片、名称和短描述。当前正在讲解的景点卡以朱砂橙边框和“当前讲解”标签高亮。
+整体画面应像一张现代化的景区导览手册：清新、友好、文化感强，同时信息层级清楚，适合游客快速理解路线。
