@@ -8,10 +8,25 @@
 
 ## 前端启动
 
+在仓库根目录可以直接运行：
+
+```powershell
+npm.cmd install
+npm.cmd run dev -- --host 0.0.0.0
+```
+
+也可以进入前端目录运行：
+
 ```powershell
 cd frontend_new
 npm.cmd install
 npm.cmd run dev -- --host 0.0.0.0
+```
+
+模拟后端保留在 `frontend_new/backend/`，可在仓库根目录运行：
+
+```powershell
+npm.cmd run backend:dev
 ```
 
 更完整的功能说明见 `frontend_new/docs/frontend-function-spec.md`。

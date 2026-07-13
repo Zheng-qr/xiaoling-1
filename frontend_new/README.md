@@ -19,6 +19,15 @@
 
 ## 快速启动
 
+如果当前位于完整项目仓库根目录，可以直接运行：
+
+```powershell
+npm.cmd install
+npm.cmd run dev -- --host 0.0.0.0
+```
+
+如果当前位于 `frontend_new/` 前端目录，运行：
+
 ```powershell
 npm.cmd install
 npm.cmd run dev -- --host 0.0.0.0

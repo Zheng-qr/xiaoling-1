@@ -1,0 +1,19 @@
+{
+  "name": "xiaoling-guide-project",
+  "private": true,
+  "version": "1.0.0",
+  "description": "小灵景区导览数字人完整项目仓库，当前新版前端位于 frontend_new/。",
+  "workspaces": [
+    "frontend_new",
+    "frontend_new/backend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix frontend_new run dev --",
+    "build": "npm --prefix frontend_new run build",
+    "preview": "npm --prefix frontend_new run preview --",
+    "frontend:dev": "npm --prefix frontend_new run dev --",
+    "frontend:build": "npm --prefix frontend_new run build",
+    "frontend:preview": "npm --prefix frontend_new run preview --",
+    "backend:dev": "npm --prefix frontend_new/backend run dev"
+  }
+}
