@@ -26,9 +26,35 @@ export const useMessageStore = create((set, get) => ({
   })),
 
   // 添加句子到队列
-  enqueueSentence: (sentence) => set(state => ({
-    sentenceQueue: [...state.sentenceQueue, sentence]
-  })),
+  enqueueSentence: (sentence) => {
+    const content = String(sentence?.content || sentence?.text || '').trim()
+    if (!content) return
+
+    set(state => ({
+      sentenceQueue: [
+        ...state.sentenceQueue,
+        {
+          ...sentence,
+          content,
+          segmentId: sentence?.segmentId || sentence?.segment_id || `seg_${state.sentenceQueue.length + 1}`,
+        }
+      ]
+    }))
+  },
+
+  // 按队列顺序取出下一句，字幕区只展示当前句
+  dequeueNextSentence: () => {
+    const { sentenceQueue } = get()
+    if (sentenceQueue.length === 0) return null
+
+    const [sentence, ...rest] = sentenceQueue
+    set({
+      sentenceQueue: rest,
+      previousSentence: '',
+      currentSentence: sentence.content
+    })
+    return sentence
+  },
 
   // 取出句子更新字幕（音频播放时调用）
   dequeueSentence: (segmentId) => {
@@ -38,11 +64,11 @@ export const useMessageStore = create((set, get) => ({
     const sentence = sentenceQueue[index]
     const newQueue = [...sentenceQueue]
     newQueue.splice(index, 1)
-    set(state => ({
+    set({
       sentenceQueue: newQueue,
-      previousSentence: state.currentSentence,
+      previousSentence: '',
       currentSentence: sentence.content
-    }))
+    })
     return sentence
   },
 
@@ -53,6 +79,12 @@ export const useMessageStore = create((set, get) => ({
 
   // 设置当前字幕
   setCurrentSentence: (sentence) => set({ currentSentence: sentence }),
+
+  // 清空当前字幕
+  clearCurrentSentence: () => set({
+    previousSentence: '',
+    currentSentence: ''
+  }),
 
   // 标记stream结束
   setStreamEndReceived: (received) => set({ streamEndReceived: received }),
@@ -66,10 +98,9 @@ export const useMessageStore = create((set, get) => ({
     if (!streamEndReceived || !allSegmentsDone) return false
 
     set(state => ({
-      messages: [
-        ...state.messages,
-        { role: 'assistant', content: state.fullAnswer }
-      ],
+      messages: state.fullAnswer.trim()
+        ? [...state.messages, { role: 'assistant', content: state.fullAnswer }]
+        : state.messages,
       fullAnswer: '',
       previousSentence: '',
       currentSentence: '',

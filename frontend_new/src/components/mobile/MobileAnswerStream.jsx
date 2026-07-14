@@ -6,7 +6,7 @@ import MobileKnowledgeBlock from './MobileKnowledgeBlock'
 import MobileMapBlock from './MobileMapBlock'
 
 function MobileAnswerStream() {
-  const { previousSentence, currentSentence, fullAnswer } = useMessageStore()
+  const { currentSentence } = useMessageStore()
   const { mainState, panelOpen, panelType, panelPayload } = useAppStore()
   const { isRouteMode, routePayload } = useRouteStore()
 
@@ -18,7 +18,7 @@ function MobileAnswerStream() {
   }, [isRouteMode, panelType, richPayload, routePayload])
 
   const knowledgePayload = panelType === 'knowledge' ? richPayload : null
-  const hasText = Boolean(previousSentence || currentSentence || fullAnswer)
+  const hasText = Boolean(currentSentence)
   const statusText = getStatusText(mainState)
 
   return (
@@ -27,21 +27,13 @@ function MobileAnswerStream() {
         <section style={styles.textPanel}>
           <div style={styles.statusPill}>{statusText}</div>
 
-          {previousSentence && previousSentence !== currentSentence && (
-            <p style={styles.previous}>{previousSentence}</p>
-          )}
-
           {currentSentence ? (
             <p style={styles.current}>{currentSentence}</p>
-          ) : (
+          ) : mainState === 'idle' ? (
             <p style={styles.empty}>
               可以向我提问景点知识，也可以让我推荐游览路线。
             </p>
-          )}
-
-          {fullAnswer && fullAnswer !== currentSentence && (
-            <p style={styles.answer}>{fullAnswer}</p>
-          )}
+          ) : null}
 
           {!hasText && mainState === 'thinking' && (
             <p style={styles.answer}>正在整理讲解内容，请稍等一下。</p>
@@ -106,12 +98,6 @@ const styles = {
     fontSize: '12px',
     fontWeight: 800,
   },
-  previous: {
-    margin: '0 0 8px',
-    color: 'rgba(60, 53, 44, 0.56)',
-    fontSize: '14px',
-    lineHeight: 1.6,
-  },
   current: {
     margin: 0,
     color: '#3C352C',
@@ -138,4 +124,3 @@ const styles = {
 }
 
 export default MobileAnswerStream
-

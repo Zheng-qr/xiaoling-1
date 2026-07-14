@@ -22,7 +22,13 @@ export function useWebSocket() {
     openPanel,
   } = useAppStore()
 
-  const { addToken, addMessage, reset, setCurrentSentence } = useMessageStore()
+  const {
+    addToken,
+    addMessage,
+    reset,
+    enqueueSentence,
+    setStreamEndReceived,
+  } = useMessageStore()
 
   const { enqueueAudioChunk, markStreamEnd, reset: resetAudio } = useAudioStore()
 
@@ -70,9 +76,6 @@ export function useWebSocket() {
         // 累积 token 内容，过滤情绪标签
         const content = data.content.replace(/\[emotion=\w+\]/g, '')
         addToken(content)
-        // 实时更新字幕
-        const { fullAnswer } = useMessageStore.getState()
-        setCurrentSentence(fullAnswer)
         break
 
       case 'emotion':
@@ -82,6 +85,15 @@ export function useWebSocket() {
 
       case 'sentence':
         console.log('[WS] sentence:', data.content?.substring(0, 30))
+        enqueueSentence({
+          segmentId: data.segmentId || data.segment_id,
+          content: data.content,
+          emotion: data.emotion,
+          duration: data.duration,
+          durationMs: data.durationMs || data.duration_ms,
+          audioDuration: data.audioDuration || data.audio_duration,
+          audioDurationMs: data.audioDurationMs || data.audio_duration_ms,
+        })
         break
 
       case 'panel_open':
@@ -109,12 +121,8 @@ export function useWebSocket() {
 
       case 'stream_end':
         markStreamEnd()
+        setStreamEndReceived(true)
         console.log('[WS] stream_end')
-        // 保存完整回答到历史
-        const { fullAnswer: answer } = useMessageStore.getState()
-        if (answer) {
-          addMessage({ role: 'assistant', content: answer })
-        }
         break
 
       case 'satisfaction_request':

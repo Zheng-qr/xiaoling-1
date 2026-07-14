@@ -4,7 +4,7 @@ import { useAppStore } from '../../stores/appStore'
 import AnswerExpand from './AnswerExpand'
 
 function SubtitleDock() {
-  const { previousSentence, currentSentence, fullAnswer } = useMessageStore()
+  const { currentSentence, fullAnswer } = useMessageStore()
   const { answerExpanded, toggleAnswerExpand, mainState } = useAppStore()
 
   // 根据状态计算字幕区透明度
@@ -23,11 +23,6 @@ function SubtitleDock() {
 
   return (
     <div className="subtitle-dock" style={{ ...styles.container, opacity: getOpacity() }}>
-      {/* 上一句 */}
-      {previousSentence && (
-        <div style={styles.previous}>{previousSentence}</div>
-      )}
-
       {/* 当前句 */}
       {currentSentence && (
         <div
@@ -57,12 +52,6 @@ const styles = {
     textAlign: 'center',
     zIndex: 20,
     transition: 'opacity 300ms ease'
-  },
-  previous: {
-    fontSize: '16px',
-    color: 'rgba(60, 53, 44, 0.6)',
-    marginBottom: '8px',
-    lineHeight: 1.6
   },
   current: {
     fontSize: '24px',
