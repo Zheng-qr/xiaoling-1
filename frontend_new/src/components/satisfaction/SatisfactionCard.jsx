@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useAppStore } from '../../stores/appStore'
-import { useWebSocket } from '../../hooks/useWebSocket'
 
-function SatisfactionCard() {
+function SatisfactionCard({ sendSatisfaction }) {
   const { showSatisfaction, hideSatisfactionCard, pendingSatisfaction } = useAppStore()
-  const { sendSatisfaction } = useWebSocket()
   const [score, setScore] = useState(0)
   const [hoveredStar, setHoveredStar] = useState(0)
   const [submitted, setSubmitted] = useState(false)

@@ -7,16 +7,17 @@ import { useIsMobile } from './hooks/useIsMobile'
 import StageLayout from './components/StageLayout'
 import RouteGuideLayout from './components/route/RouteGuideLayout'
 import MobileStageLayout from './components/mobile/MobileStageLayout'
+import SpotDetailLayout from './components/scenic/SpotDetailLayout'
 
 const SATISFACTION_DELAY = 5000
 
 function App() {
-  const { mainState, pendingSatisfaction, clearPendingSatisfaction } = useAppStore()
+  const { mainState, pendingSatisfaction, clearPendingSatisfaction, selectedSpotId } = useAppStore()
   const { isRouteMode } = useRouteStore()
   const isMobile = useIsMobile()
 
   // 初始化 WebSocket 和 AudioPlayer
-  const { sendSatisfaction } = useWebSocket()
+  const { sendQuestion, sendSatisfaction } = useWebSocket()
   useAudioPlayer()
 
   // 满意度卡片
@@ -46,11 +47,22 @@ function App() {
   return (
     <div className="app">
       {isMobile ? (
-        <MobileStageLayout />
+        <MobileStageLayout
+          sendQuestion={sendQuestion}
+          sendSatisfaction={sendSatisfaction}
+        />
       ) : isRouteMode ? (
         <RouteGuideLayout />
+      ) : selectedSpotId ? (
+        <SpotDetailLayout
+          sendQuestion={sendQuestion}
+          sendSatisfaction={sendSatisfaction}
+        />
       ) : (
-        <StageLayout />
+        <StageLayout
+          sendQuestion={sendQuestion}
+          sendSatisfaction={sendSatisfaction}
+        />
       )}
 
       {showCard && pendingSatisfaction && (

@@ -7,17 +7,17 @@ import HistoryOverlay from '../history/HistoryOverlay'
 import SatisfactionCard from '../satisfaction/SatisfactionCard'
 import ImageModal from '../common/ImageModal'
 
-function MobileStageLayout() {
+function MobileStageLayout({ sendQuestion, sendSatisfaction }) {
   const { historyOpen, imageModal, closeImageModal } = useAppStore()
 
   return (
     <div className="mobile-stage-layout main-mode-bg" style={styles.container}>
       <MobileAvatarStage />
       <MobileAnswerStream />
-      <MobileInputBar />
+      <MobileInputBar sendQuestion={sendQuestion} />
 
       {historyOpen && <HistoryOverlay isMobile />}
-      <SatisfactionCard />
+      <SatisfactionCard sendSatisfaction={sendSatisfaction} />
 
       {imageModal.visible && (
         <ImageModal
@@ -43,4 +43,3 @@ const styles = {
 }
 
 export default MobileStageLayout
-

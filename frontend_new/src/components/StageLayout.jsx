@@ -2,15 +2,15 @@ import React from 'react'
 import { useAppStore } from '../stores/appStore'
 import AvatarStage from './avatar/AvatarStage'
 import SubtitleDock from './subtitle/SubtitleDock'
-import ControlDock from './control/ControlDock'
+import ScenicSidebar from './scenic/ScenicSidebar'
 import InputBar from './control/InputBar'
 import ScrollPanel from './panel/ScrollPanel'
 import HistoryOverlay from './history/HistoryOverlay'
 import SatisfactionCard from './satisfaction/SatisfactionCard'
 import ImageModal from './common/ImageModal'
 
-function StageLayout() {
-  const { mainState, historyOpen, panelOpen, imageModal, closeImageModal } = useAppStore()
+function StageLayout({ sendQuestion, sendSatisfaction }) {
+  const { historyOpen, panelOpen, imageModal, closeImageModal } = useAppStore()
 
   return (
     <div className="stage-layout main-mode-bg" style={styles.container}>
@@ -23,11 +23,11 @@ function StageLayout() {
       {/* 字幕区 */}
       <SubtitleDock />
 
-      {/* 控制区 - 预设按钮面板（右上角，可拖拽） */}
-      <ControlDock />
+      {/* 主页左侧景点预览侧边栏 */}
+      {!panelOpen && <ScenicSidebar sendQuestion={sendQuestion} />}
 
       {/* 底部输入栏 */}
-      <InputBar />
+      <InputBar sendQuestion={sendQuestion} />
 
       {/* 画轴 */}
       {panelOpen && <ScrollPanel />}
@@ -36,7 +36,7 @@ function StageLayout() {
       {historyOpen && <HistoryOverlay />}
 
       {/* 满意度评分 */}
-      <SatisfactionCard />
+      <SatisfactionCard sendSatisfaction={sendSatisfaction} />
 
       {/* 图片放大模态框 */}
       {imageModal.visible && (

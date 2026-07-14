@@ -1,19 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useAppStore } from '../../stores/appStore'
-import { useWebSocket } from '../../hooks/useWebSocket'
 
 const getSpeechRecognition = () => {
   if (typeof window === 'undefined') return null
   return window.SpeechRecognition || window.webkitSpeechRecognition || null
 }
 
-function MobileInputBar() {
+function MobileInputBar({ sendQuestion }) {
   const [inputValue, setInputValue] = useState('')
   const [isListening, setIsListening] = useState(false)
   const inputRef = useRef(null)
   const recognitionRef = useRef(null)
   const latestTranscriptRef = useRef('')
-  const { sendQuestion } = useWebSocket()
   const { toggleHistory, mainState, transitionTo } = useAppStore()
   const isBusy = mainState === 'speaking' || mainState === 'thinking'
 

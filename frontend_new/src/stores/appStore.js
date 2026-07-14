@@ -18,10 +18,12 @@ export const useAppStore = create((set, get) => ({
   panelType: null,           // 'knowledge' | 'map' | null
   panelSegmentId: null,
   panelPayload: null,
+  mobileGuideCard: null,
   historyOpen: false,
   answerExpanded: false,
   controlIntensity: 1,
   thinkingVideoVisible: false,
+  selectedSpotId: null,
 
   // 响应标识
   currentResponseId: null,
@@ -89,6 +91,9 @@ export const useAppStore = create((set, get) => ({
   },
 
   // 响应生命周期清理
+  setMobileGuideCard: (card) => set({ mobileGuideCard: card }),
+  clearMobileGuideCard: () => set({ mobileGuideCard: null }),
+
   clearResponse: () => set(state => ({
     lastCompletedResponseId: state.currentResponseId,
     currentResponseId: null,
@@ -99,6 +104,18 @@ export const useAppStore = create((set, get) => ({
 
   // 控制区强度
   setControlIntensity: (intensity) => set({ controlIntensity: intensity }),
+
+  // 景点详情页
+  openSpotDetail: (spotId) => set({
+    selectedSpotId: spotId,
+    panelOpen: false,
+    panelType: null,
+    panelSegmentId: null,
+    panelPayload: null,
+    historyOpen: false,
+    answerExpanded: false
+  }),
+  closeSpotDetail: () => set({ selectedSpotId: null }),
 
   // 回答展开
   toggleAnswerExpand: () => set(state => ({ answerExpanded: !state.answerExpanded })),

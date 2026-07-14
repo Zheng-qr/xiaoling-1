@@ -1,35 +1,47 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useAppStore } from '../../stores/appStore'
 import { useMessageStore } from '../../stores/messageStore'
-import { useRouteStore } from '../../stores/routeStore'
 import MobileKnowledgeBlock from './MobileKnowledgeBlock'
 import MobileMapBlock from './MobileMapBlock'
 
 function MobileAnswerStream() {
+  const scrollRef = useRef(null)
   const { currentSentence } = useMessageStore()
-  const { mainState, panelOpen, panelType, panelPayload } = useAppStore()
-  const { isRouteMode, routePayload } = useRouteStore()
+  const { mainState, mobileGuideCard } = useAppStore()
+  const shouldShowGuideCard = mainState === 'idle' && Boolean(mobileGuideCard?.payload)
 
-  const richPayload = panelOpen ? panelPayload : null
   const mapPayload = useMemo(() => {
-    if (panelType === 'map' && richPayload) return richPayload
-    if (isRouteMode && routePayload) return routePayload
+    if (shouldShowGuideCard && mobileGuideCard.type === 'route') return mobileGuideCard.payload
     return null
-  }, [isRouteMode, panelType, richPayload, routePayload])
+  }, [mobileGuideCard, shouldShowGuideCard])
 
-  const knowledgePayload = panelType === 'knowledge' ? richPayload : null
+  const knowledgePayload = useMemo(() => {
+    if (shouldShowGuideCard && mobileGuideCard.type === 'spot') return mobileGuideCard.payload
+    return null
+  }, [mobileGuideCard, shouldShowGuideCard])
+
+  useEffect(() => {
+    if (!shouldShowGuideCard) return
+
+    window.requestAnimationFrame(() => {
+      const node = scrollRef.current
+      if (!node) return
+      node.scrollTo({ top: node.scrollHeight, behavior: 'smooth' })
+    })
+  }, [shouldShowGuideCard, mapPayload, knowledgePayload])
+
   const hasText = Boolean(currentSentence)
   const statusText = getStatusText(mainState)
 
   return (
     <main style={styles.container}>
-      <div style={styles.scrollContent}>
+      <div ref={scrollRef} style={styles.scrollContent}>
         <section style={styles.textPanel}>
           <div style={styles.statusPill}>{statusText}</div>
 
           {currentSentence ? (
             <p style={styles.current}>{currentSentence}</p>
-          ) : mainState === 'idle' ? (
+          ) : mainState === 'idle' && !shouldShowGuideCard ? (
             <p style={styles.empty}>
               可以向我提问景点知识，也可以让我推荐游览路线。
             </p>

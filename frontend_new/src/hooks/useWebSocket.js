@@ -4,22 +4,31 @@ import { useMessageStore } from '../stores/messageStore'
 import { useAudioStore } from '../stores/audioStore'
 import { useRouteStore } from '../stores/routeStore'
 import { WebSocketClient } from '../utils/websocket'
+import {
+  GUIDE_INTENTS,
+  chooseControlIntent,
+  consumeControlText,
+  matchRoutePayload,
+  matchSpotPayload,
+} from '../utils/guideTriggers'
 
-// 真实后端 WebSocket 地址
 const WS_URL = 'ws://localhost:8000/ws/digital_human_client'
 
 export function useWebSocket() {
   const wsClientRef = useRef(null)
+  const controlTextBufferRef = useRef('')
+  const controlIntentRef = useRef(null)
+  const controlScanTextRef = useRef('')
+  const controlTriggeredRef = useRef(false)
+  const controlResponseIdRef = useRef(null)
 
   const {
     startThinking,
-    stopThinking,
-    transitionTo,
     setEmotion,
-    setPendingSatisfaction,
     clearPendingSatisfaction,
     setCurrentResponseId,
     openPanel,
+    closePanel,
   } = useAppStore()
 
   const {
@@ -32,7 +41,220 @@ export function useWebSocket() {
 
   const { enqueueAudioChunk, markStreamEnd, reset: resetAudio } = useAudioStore()
 
-  // 初始化 WebSocket
+  const resetControlSignalState = useCallback(() => {
+    controlTextBufferRef.current = ''
+    controlIntentRef.current = null
+    controlScanTextRef.current = ''
+    controlTriggeredRef.current = false
+    controlResponseIdRef.current = null
+  }, [])
+
+  const setMobileGuideCard = useCallback((type, payload) => {
+    useAppStore.getState().setMobileGuideCard({ type, payload })
+  }, [])
+
+  const rememberResponseId = useCallback((data) => {
+    const responseId = data?.responseId || data?.response_id || useAppStore.getState().currentResponseId
+    if (responseId) {
+      controlResponseIdRef.current = responseId
+      setCurrentResponseId(responseId)
+      return responseId
+    }
+
+    if (!controlResponseIdRef.current) {
+      controlResponseIdRef.current = `resp_${Date.now()}`
+      setCurrentResponseId(controlResponseIdRef.current)
+    }
+
+    return controlResponseIdRef.current
+  }, [setCurrentResponseId])
+
+  const triggerGuideUiIfReady = useCallback((force = false) => {
+    if (controlTriggeredRef.current || !controlIntentRef.current) return
+
+    const text = controlScanTextRef.current
+
+    if (controlIntentRef.current === GUIDE_INTENTS.ROUTE) {
+      const payload = matchRoutePayload(text, { allowDefault: force })
+      if (!payload) return
+
+      closePanel(false)
+      useRouteStore.getState().enterRouteMode(payload)
+      setMobileGuideCard('route', payload)
+      controlTriggeredRef.current = true
+      return
+    }
+
+    if (controlIntentRef.current === GUIDE_INTENTS.SPOT) {
+      const payload = matchSpotPayload(text)
+      if (!payload) return
+
+      useRouteStore.getState().exitRouteMode()
+      const responseId = controlResponseIdRef.current || rememberResponseId()
+      openPanel(responseId, `guide_${payload.title}`, 'knowledge', payload)
+      setMobileGuideCard('spot', payload)
+      controlTriggeredRef.current = true
+    }
+  }, [closePanel, openPanel, rememberResponseId, setMobileGuideCard])
+
+  const consumeTokenContent = useCallback((content, data) => {
+    controlTextBufferRef.current += String(content || '')
+
+    const parsed = consumeControlText(controlTextBufferRef.current, { final: false })
+    controlTextBufferRef.current = parsed.rest
+    controlIntentRef.current = chooseControlIntent(controlIntentRef.current, parsed.intents)
+
+    if (parsed.cleanText) {
+      controlScanTextRef.current += parsed.cleanText
+    }
+
+    if (parsed.intents.length > 0 || parsed.cleanText) {
+      rememberResponseId(data)
+      triggerGuideUiIfReady(false)
+    }
+
+    return parsed.cleanText
+  }, [rememberResponseId, triggerGuideUiIfReady])
+
+  const observeSentenceControlSignal = useCallback((content, data) => {
+    const parsed = consumeControlText(String(content || ''), { final: true })
+    controlIntentRef.current = chooseControlIntent(controlIntentRef.current, parsed.intents)
+
+    if (parsed.cleanText) {
+      controlScanTextRef.current += parsed.cleanText
+    }
+
+    if (parsed.intents.length > 0 || parsed.cleanText) {
+      rememberResponseId(data)
+      triggerGuideUiIfReady(false)
+    }
+
+    return parsed
+  }, [rememberResponseId, triggerGuideUiIfReady])
+
+  const handleMessage = useCallback((data) => {
+    switch (data.type) {
+      case 'connected':
+        console.log('[WS] Connection confirmed:', data.message)
+        break
+
+      case 'stream_start':
+        console.log('[WS] stream_start')
+        resetControlSignalState()
+        rememberResponseId(data)
+        break
+
+      case 'intent':
+        console.log('[WS] intent:', data.intent, data.confidence)
+        break
+
+      case 'token': {
+        const rawContent = String(data.content || '').replace(/\[emotion=\w+\]/g, '')
+        const content = consumeTokenContent(rawContent, data)
+        if (content) addToken(content)
+        break
+      }
+
+      case 'emotion':
+        setEmotion(data.emotion || data.content)
+        console.log('[WS] emotion:', data.emotion)
+        break
+
+      case 'sentence':
+        observeSentenceControlSignal(String(data.content || '').replace(/\[emotion=\w+\]/g, ''), data)
+        console.log('[WS] sentence:', data.content?.substring(0, 30))
+        enqueueSentence({
+          segmentId: data.segmentId || data.segment_id,
+          content: data.content,
+          emotion: data.emotion,
+          duration: data.duration,
+          durationMs: data.durationMs || data.duration_ms,
+          audioDuration: data.audioDuration || data.audio_duration,
+          audioDurationMs: data.audioDurationMs || data.audio_duration_ms,
+        })
+        break
+
+      case 'panel_open': {
+        const panelType = data.panelType || data.typeName || 'knowledge'
+        if (data.responseId) {
+          setCurrentResponseId(data.responseId)
+        }
+        if (panelType === 'knowledge' && data.payload) {
+          setMobileGuideCard('spot', data.payload)
+        }
+        if (panelType === 'map' && data.payload) {
+          setMobileGuideCard('route', data.payload)
+        }
+        openPanel(
+          data.responseId,
+          data.segmentId || 'seg_001',
+          panelType,
+          data.payload || null
+        )
+        break
+      }
+
+      case 'route_guidance':
+        if (data.payload) {
+          useRouteStore.getState().enterRouteMode(data.payload)
+          setMobileGuideCard('route', data.payload)
+        }
+        break
+
+      case 'binary':
+        enqueueAudioChunk(data.data)
+        break
+
+      case 'stream_end': {
+        if (controlTextBufferRef.current) {
+          const parsed = consumeControlText(controlTextBufferRef.current, { final: true })
+          controlTextBufferRef.current = ''
+          controlIntentRef.current = chooseControlIntent(controlIntentRef.current, parsed.intents)
+          if (parsed.cleanText) {
+            controlScanTextRef.current += parsed.cleanText
+            addToken(parsed.cleanText)
+          }
+        }
+
+        triggerGuideUiIfReady(true)
+        markStreamEnd()
+        setStreamEndReceived(true)
+        console.log('[WS] stream_end')
+        break
+      }
+
+      case 'satisfaction_request':
+        console.log('[WS] satisfaction:', data.session_id)
+        useAppStore.getState().setPendingSatisfaction(data)
+        break
+
+      case 'pong':
+        break
+
+      case 'error':
+        console.error('[WS] Error:', data.message)
+        break
+
+      default:
+        break
+    }
+  }, [
+    addToken,
+    consumeTokenContent,
+    enqueueAudioChunk,
+    enqueueSentence,
+    markStreamEnd,
+    observeSentenceControlSignal,
+    openPanel,
+    rememberResponseId,
+    resetControlSignalState,
+    setCurrentResponseId,
+    setEmotion,
+    setMobileGuideCard,
+    setStreamEndReceived,
+    triggerGuideUiIfReady,
+  ])
+
   useEffect(() => {
     wsClientRef.current = new WebSocketClient(WS_URL)
 
@@ -55,94 +277,8 @@ export function useWebSocket() {
         wsClientRef.current.disconnect()
       }
     }
-  }, [])
+  }, [handleMessage])
 
-  // 处理后端消息
-  const handleMessage = useCallback((data) => {
-    switch (data.type) {
-      case 'connected':
-        console.log('[WS] Connection confirmed:', data.message)
-        break
-
-      case 'stream_start':
-        console.log('[WS] stream_start')
-        break
-
-      case 'intent':
-        console.log('[WS] intent:', data.intent, data.confidence)
-        break
-
-      case 'token':
-        // 累积 token 内容，过滤情绪标签
-        const content = data.content.replace(/\[emotion=\w+\]/g, '')
-        addToken(content)
-        break
-
-      case 'emotion':
-        setEmotion(data.emotion || data.content)
-        console.log('[WS] emotion:', data.emotion)
-        break
-
-      case 'sentence':
-        console.log('[WS] sentence:', data.content?.substring(0, 30))
-        enqueueSentence({
-          segmentId: data.segmentId || data.segment_id,
-          content: data.content,
-          emotion: data.emotion,
-          duration: data.duration,
-          durationMs: data.durationMs || data.duration_ms,
-          audioDuration: data.audioDuration || data.audio_duration,
-          audioDurationMs: data.audioDurationMs || data.audio_duration_ms,
-        })
-        break
-
-      case 'panel_open':
-        if (data.responseId) {
-          setCurrentResponseId(data.responseId)
-        }
-        openPanel(
-          data.responseId,
-          data.segmentId || 'seg_001',
-          data.panelType || data.typeName || 'knowledge',
-          data.payload || null
-        )
-        break
-
-      case 'route_guidance':
-        if (data.payload) {
-          useRouteStore.getState().enterRouteMode(data.payload)
-        }
-        break
-
-      case 'binary':
-        // 收到 PCM16 音频数据
-        enqueueAudioChunk(data.data)
-        break
-
-      case 'stream_end':
-        markStreamEnd()
-        setStreamEndReceived(true)
-        console.log('[WS] stream_end')
-        break
-
-      case 'satisfaction_request':
-        console.log('[WS] satisfaction:', data.session_id)
-        useAppStore.getState().setPendingSatisfaction(data)
-        break
-
-      case 'pong':
-        break
-
-      case 'error':
-        console.error('[WS] Error:', data.message)
-        break
-
-      default:
-        break
-    }
-  }, [])
-
-  // 发送问题
   const sendQuestion = useCallback((content) => {
     const { mainState } = useAppStore.getState()
     if (mainState === 'speaking' || mainState === 'thinking') {
@@ -150,21 +286,27 @@ export function useWebSocket() {
       return
     }
 
-    // 重置状态
     startThinking()
     clearPendingSatisfaction()
+    resetControlSignalState()
+    useAppStore.getState().clearMobileGuideCard()
     reset()
     resetAudio()
 
-    // 发送问题
     if (wsClientRef.current) {
       wsClientRef.current.send({ type: 'question', content })
     }
     addMessage({ role: 'user', content })
     console.log('[WS] Sent:', content)
-  }, [])
+  }, [
+    addMessage,
+    clearPendingSatisfaction,
+    reset,
+    resetAudio,
+    resetControlSignalState,
+    startThinking,
+  ])
 
-  // 发送满意度
   const sendSatisfaction = useCallback((score, sessionId, messageId) => {
     if (wsClientRef.current) {
       wsClientRef.current.send({

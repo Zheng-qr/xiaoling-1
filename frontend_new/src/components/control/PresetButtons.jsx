@@ -1,5 +1,4 @@
 import React from 'react'
-import { useWebSocket } from '../../hooks/useWebSocket'
 import { useAppStore } from '../../stores/appStore'
 
 // 预设按钮配置
@@ -20,8 +19,7 @@ const PRESET_BUTTONS = {
   ]
 }
 
-function PresetButtons({ onEndTour }) {
-  const { sendQuestion } = useWebSocket()
+function PresetButtons({ onEndTour, sendQuestion }) {
   const { mainState } = useAppStore()
   const isBusy = mainState === 'speaking' || mainState === 'thinking'
 

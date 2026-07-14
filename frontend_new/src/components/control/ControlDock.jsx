@@ -3,7 +3,7 @@ import PresetButtons from './PresetButtons'
 import { useAppStore } from '../../stores/appStore'
 import { useRouteStore } from '../../stores/routeStore'
 
-function ControlDock() {
+function ControlDock({ sendQuestion }) {
   const [position, setPosition] = useState({ x: 20, y: 20 })
   const [isDragging, setIsDragging] = useState(false)
   const dragStartRef = useRef({ x: 0, y: 0 })
@@ -76,7 +76,7 @@ function ControlDock() {
       }}
       onMouseDown={handleMouseDown}
     >
-      <PresetButtons onEndTour={endTour} />
+      <PresetButtons onEndTour={endTour} sendQuestion={sendQuestion} />
     </div>
   )
 }
